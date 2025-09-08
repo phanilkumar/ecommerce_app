@@ -1,0 +1,11 @@
+<h2>Email Confirmation</h2>
+
+<% if resource.errors.empty? %>
+  <p>Your email address has been successfully confirmed.</p>
+  <p>You can now sign in to your account.</p>
+  <%= link_to "Sign in", new_user_session_path, class: "btn btn-primary" %>
+<% else %>
+  <p>There was an error confirming your email address.</p>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= link_to "Request new confirmation", new_user_confirmation_path, class: "btn btn-secondary" %>
+<% end %>
