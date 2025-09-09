@@ -1,0 +1,41 @@
+# Development Dockerfile for Rails application
+FROM ruby:3.2.2-slim
+
+# Install system dependencies
+RUN apt-get update -qq && \
+    apt-get install -y \
+    build-essential \
+    libpq-dev \
+    curl \
+    git \
+    nodejs \
+    npm \
+    postgresql-client \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Yarn
+RUN npm install -g yarn
+
+# Set working directory
+WORKDIR /app
+
+# Install gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Install node modules
+COPY package.json yarn.lock ./
+RUN yarn install
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p tmp/pids
+
+# Expose port
+EXPOSE 3000
+
+# Default command
+CMD ["bash"]
