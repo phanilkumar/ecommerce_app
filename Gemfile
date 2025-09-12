@@ -24,6 +24,10 @@ gem "jbuilder"
 
 # Authentication solution for Rails [https://github.com/heartcombo/devise]
 gem "devise"
+# OAuth authentication for Google
+gem "omniauth-google-oauth2"
+# CSRF protection for OmniAuth 2.0
+gem "omniauth-rails_csrf_protection"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -48,6 +52,9 @@ gem "thruster", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  
+  # Load environment variables from .env file
+  gem "dotenv-rails"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
