@@ -10,6 +10,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       session['devise.google_data'] = request.env['omniauth.auth'].except(:extra) # Removing extra as it can overflow some session stores
       redirect_to new_user_registration_url, alert: @user.errors.full_messages.join("\n")
     end
+  rescue => e
+    Rails.logger.error "OAuth error: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
+    redirect_to new_user_registration_url, alert: "Authentication failed. Please try again."
   end
 
 
