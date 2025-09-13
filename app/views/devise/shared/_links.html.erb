@@ -26,19 +26,25 @@
   <% end %>
 
   <%- if devise_mapping.omniauthable? %>
-    <div class="mt-3">
-      <small class="text-muted">
-        Already have an account? OAuth will sign you in automatically.
-      </small>
-    </div>
     <%- resource_class.omniauth_providers.each do |provider| %>
       <div class="mt-2">
         <% 
-          # OAuth buttons work for both sign in and sign up
-          # If user exists, they'll be signed in; if not, a new account will be created
-          button_text = "Continue with #{OmniAuth::Utils.camelize(provider)}"
+          # Determine button text based on current controller
+          button_text = if controller_name == 'registrations'
+            "Sign up with #{OmniAuth::Utils.camelize(provider)}"
+          else
+            "Sign in with #{OmniAuth::Utils.camelize(provider)}"
+          end
         %>
-        <%= button_to button_text, omniauth_authorize_path(resource_name, provider), data: { turbo: false }, class: "btn btn-outline-secondary" %>
+        <% 
+          # Add oauth_source parameter when coming from signup page
+          oauth_path = if controller_name == 'registrations'
+            omniauth_authorize_path(resource_name, provider) + "?oauth_source=signup"
+          else
+            omniauth_authorize_path(resource_name, provider)
+          end
+        %>
+        <%= button_to button_text, oauth_path, data: { turbo: false }, class: "btn btn-outline-secondary" %>
       </div>
     <% end %>
   <% end %>
